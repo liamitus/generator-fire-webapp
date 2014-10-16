@@ -1,0 +1,19 @@
+{
+  "name": "generator-fire-webapp",
+  "version": "0.1.0",
+  "description": "Lays the foundations of a new web application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "dependencies": {
+    "chalk": "^0.5.1",
+    "yeoman-generator": "^0.17.7",
+    "generator-fire-grunt": "^0.1.0"
+  },
+  "author": "Liam Howell <lhowell@mobiquityinc.com>",
+  "license": "MIT"
+}
