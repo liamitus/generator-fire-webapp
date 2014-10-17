@@ -19,7 +19,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 		this.promptForConfigConfirmation();
 	},
 
-	promptForNewConfig: function () {
+	promptForNewConfig: function (callback) {
 		var questions = [
 			{
 				type: "input",
@@ -89,15 +89,14 @@ var WebappGenBase = yeoman.generators.Base.extend({
 				}
 			},
 		];
-		var done = this.async();
+		var done = callback || this.async();
 		this.prompt(questions, function (answers) {			
 			this.config.set("project_config", answers);
-			this.promptForConfigConfirmation();
-			done();
+			this.promptForConfigConfirmation(done);
 		}.bind(this));
 	},
 
-	promptForConfigConfirmation: function () {		
+	promptForConfigConfirmation: function (callback) {		
 		var configJSON = this.config.get("project_config");
 		this.log(JSON.stringify(configJSON, null, "  "));
 		var questions = [
@@ -108,23 +107,27 @@ var WebappGenBase = yeoman.generators.Base.extend({
 				default: true
 			}
 		];
-		var done = this.async();
+		var done = callback || this.async();
 		this.prompt(questions, function (answers) {			
 			if (answers.useExistingConfig === false) {
 				this.config.delete("project_config");
 				this.usingPreexistingConfig = false;
 				this.logHeader(chalk.green("Setting up new project configuration."));
-				this.promptForNewConfig();
+				this.promptForNewConfig(callback);
 			} else if (!this.usingPreexistingConfig) {
-				this.printResults();
-			}			
-			done();
+				this.printResults(done);
+			} else {
+				done();
+			}
 		}.bind(this));
 	},
 
-	printResults: function () {
+	printResults: function (callback) {
 		this.log("Config:");
 		this.log(JSON.stringify(this.config.get("project_config"), null, "  "));
+		if (callback) {
+			callback();
+		}
 	},
 
 	logHeader: function () {
