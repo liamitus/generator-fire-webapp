@@ -19,6 +19,9 @@ var WebappGenBase = yeoman.generators.Base.extend({
 	// SPecifies whenther or not existing config was found.
 	usingPreexistingConfig: false,
 
+
+	// Prompt the user for existing config, if found.
+	// This method assumes config already exists.
 	promptForExistingConfig: function () {		
 		var configJSON = this.config.get("project_config");
 		this.log("Existing project configurations found:");
@@ -26,6 +29,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 		this.promptForConfigConfirmation();
 	},
 
+	// Prompt the user for new project configurations.
 	promptForNewConfig: function (callback) {
 		var questions = [
 			{
@@ -103,6 +107,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 		}.bind(this));
 	},
 
+	// Prompt the user to confirm their choice of project configurations.
 	promptForConfigConfirmation: function (callback) {		
 		var configJSON = this.config.get("project_config");
 		this.log(JSON.stringify(configJSON, null, "  "));
@@ -127,6 +132,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 		}.bind(this));
 	},
 
+	// Create the source directory for the app.
 	createSrcDirectory: function () {
 		var ctx = this;
 		ctx.log(chalk.yellow("Creating", config.src, "..."));
@@ -134,6 +140,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 	    ctx.log(chalk.yellow(config.src, "created successfully."));
 	},
 
+	// Utility method to log with space above and below the message.
 	logHeader: function () {
 		var argArray = this.objectToArray(arguments);
 		this.log();
@@ -141,6 +148,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 		this.log();
 	},
 
+	// Convert a given object to an array.
 	objectToArray: function (obj) {
 		return Array.prototype.slice.call(obj);
 	},
@@ -198,6 +206,7 @@ module.exports = WebappGenBase.extend({
 		}
 	},
 
+	// Exit the generator if the clean option is enabled (and complete).
 	exitAfterClean: function () {
 		if (this.clean) {
 			this.logHeader(chalk.green("Cleanup complete!"));
@@ -211,6 +220,7 @@ module.exports = WebappGenBase.extend({
 		this.logHeader("So you are making a new", chalk.red("fire"), "web project?");
 	},
 
+	// Begin the user prompt cycle.
 	promting: function () {
 		if (this.config.get("project_config")) {
 			this.promptForExistingConfig();
@@ -219,6 +229,7 @@ module.exports = WebappGenBase.extend({
 		}
 	},
 
+	// Write files and folders to the project.
 	writing: function () {
 		this.logHeader(chalk.red("Firing"), chalk.yellow("up your web project..."));
 		this.createSrcDirectory();
@@ -226,6 +237,7 @@ module.exports = WebappGenBase.extend({
 		this.template("index.html", "app/index.html");
 	},
 
+	// Bring other generators into the mix.
 	composing: function () {
 		var configJSON = this.config.get("project_config");
 		var options = {};
