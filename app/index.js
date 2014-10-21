@@ -5,6 +5,13 @@
 var yeoman = require("yeoman-generator");
 var chalk = require("chalk");
 
+// -------------------------------------------------------------------- Settings
+
+var config = {
+	src: "app",
+	dest: "build"
+};
+
 // -------------------------------------------------------------- Helper methods
 
 var WebappGenBase = yeoman.generators.Base.extend({
@@ -103,7 +110,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 			{
 				type: "confirm",
 				name: "useExistingConfig",
-				message: "Would you like to use this configuration?",
+				message: "Would you like to use these configurations?",
 				default: true
 			}
 		];
@@ -114,20 +121,17 @@ var WebappGenBase = yeoman.generators.Base.extend({
 				this.usingPreexistingConfig = false;
 				this.logHeader(chalk.green("Setting up new project configuration."));
 				this.promptForNewConfig(callback);
-			} else if (!this.usingPreexistingConfig) {
-				this.printResults(done);
 			} else {
 				done();
 			}
 		}.bind(this));
 	},
 
-	printResults: function (callback) {
-		this.log("Config:");
-		this.log(JSON.stringify(this.config.get("project_config"), null, "  "));
-		if (callback) {
-			callback();
-		}
+	createSrcDirectory: function () {
+		var ctx = this;
+		ctx.log(chalk.yellow("Creating", config.src, "..."));
+	    this.mkdir(config.src);
+	    ctx.log(chalk.yellow(config.src, "created successfully."));
 	},
 
 	logHeader: function () {
@@ -215,12 +219,20 @@ module.exports = WebappGenBase.extend({
 		}
 	},
 
+	writing: function () {
+		this.logHeader(chalk.red("Firing"), chalk.yellow("up your web project..."));
+		this.createSrcDirectory();
+		this.src.copy("favicon.ico", "app/favicon.ico");
+		this.template("index.html", "app/index.html");
+	},
+
 	composing: function () {
-		this.logHeader(chalk.yellow("Igniting a"), chalk.red("fire"), chalk.yellow("under your web project..."));
 		var configJSON = this.config.get("project_config");
 		var options = {};
 		var settings = {};
-		this.composeWith("fire-grunt", options, settings);
+		if (configJSON.build_system === "grunt") {
+			this.composeWith("fire-grunt", {}, {});			
+		}
 	}
 
 });
