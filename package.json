@@ -11,8 +11,8 @@
   ],
   "dependencies": {
     "chalk": "^0.5.1",
-    "yeoman-generator": "^0.17.7",
-    "generator-fire-grunt": "^0.1.0"
+    "generator-fire-grunt": "^0.1.0",
+    "yeoman-generator": "^0.17.7"
   },
   "author": "Liam Howell <lhowell@mobiquityinc.com>",
   "license": "MIT"
