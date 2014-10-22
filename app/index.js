@@ -127,6 +127,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 				this.logHeader(chalk.green("Setting up new project configuration."));
 				this.promptForNewConfig(callback);
 			} else {
+				this.logHeader(chalk.red("Firing"), chalk.yellow("up your web project..."));
 				done();
 			}
 		}.bind(this));
@@ -135,9 +136,8 @@ var WebappGenBase = yeoman.generators.Base.extend({
 	// Create the source directory for the app.
 	createSrcDirectory: function () {
 		var ctx = this;
-		ctx.log(chalk.yellow("Creating", config.src, "..."));
+		ctx.log(chalk.yellow("Creating", config.src, "directory..."));
 	    this.mkdir(config.src);
-	    ctx.log(chalk.yellow(config.src, "created successfully."));
 	},
 
 	// Utility method to log with space above and below the message.
@@ -217,6 +217,8 @@ module.exports = WebappGenBase.extend({
 
 	// Prints the webcome message.
 	welcomeMessage: function () {
+		// Have Yeoman greet the user.
+		this.log(this.yeoman);
 		this.logHeader("So you are making a new", chalk.red("fire"), "web project?");
 	},
 
@@ -231,7 +233,6 @@ module.exports = WebappGenBase.extend({
 
 	// Write files and folders to the project.
 	writing: function () {
-		this.logHeader(chalk.red("Firing"), chalk.yellow("up your web project..."));
 		this.createSrcDirectory();
 		this.src.copy("favicon.ico", "app/favicon.ico");
 		this.template("index.html", "app/index.html");
@@ -240,10 +241,12 @@ module.exports = WebappGenBase.extend({
 	// Bring other generators into the mix.
 	composing: function () {
 		var configJSON = this.config.get("project_config");
-		var options = {};
+		var options = {
+			args: JSON.stringify(configJSON)
+		};
 		var settings = {};
-		if (configJSON.build_system === "grunt") {
-			this.composeWith("fire-grunt", {}, {});			
+		if (configJSON.language === "javascript") {
+			this.composeWith("fire-js", options, settings);			
 		}
 	}
 
