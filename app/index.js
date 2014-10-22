@@ -109,6 +109,12 @@ var WebappGenBase = yeoman.generators.Base.extend({
 					return val.toLowerCase();
 				}
 			},
+			{
+				type: "confirm",
+				name: "usingBootstrap",
+				message: "Will you need Bootstrap? (recommended)",
+				default: true
+			}
 		];
 		var done = callback || this.async();
 		this.prompt(questions, function (answers) {			
@@ -257,6 +263,9 @@ module.exports = WebappGenBase.extend({
 		var settings = {};
 		if (configJSON.language === "javascript") {
 			this.composeWith("fire-js", options, settings);			
+		}
+		if (configJSON.usingBootstrap === true) {
+			this.composeWith("fire-bootstrap", options, settings);			
 		}
 	}
 
