@@ -1,5 +1,15 @@
 "use strict";
 
+/*
+	Fire Web App
+
+	Prompts a user for new web app configurations. Calls appropriate
+	sub-generators to build the project.
+
+	Author:	Liam Howell <lhowell@mobiquityinc.com>
+	Since:	10-22-2014
+*/
+
 // --------------------------------------------------------------------- Imports
 
 var yeoman = require("yeoman-generator");
