@@ -14,6 +14,7 @@
 
 var yeoman = require("yeoman-generator");
 var chalk = require("chalk");
+var yosay = require("yosay");
 
 // -------------------------------------------------------------------- Settings
 
@@ -180,6 +181,24 @@ var WebappGenBase = yeoman.generators.Base.extend({
 			arr[index] = part.slice(10);
 		});
 		return fireComponents;
+	},
+
+	composeWithJS: function (configJSON) {
+		var options = {
+			args: JSON.stringify(configJSON)
+		};
+		var settings = {};
+		this.composeWith("fire-js", options, settings);	
+	},
+
+	composeWithBootstrap: function (configJSON) {
+		var options = {
+			args: JSON.stringify(configJSON)
+		};
+		var settings = {
+			//local: require.resolve("generator-fire-grunt")
+		};
+		this.composeWith("fire-bootstrap", options, settings);	
 	}
 
 });
@@ -234,8 +253,7 @@ module.exports = WebappGenBase.extend({
 	// Prints the webcome message.
 	welcomeMessage: function () {
 		// Have Yeoman greet the user.
-		this.log(this.yeoman);
-		this.logHeader("So you are making a new", chalk.red("fire"), "web project?");
+		this.log(yosay(chalk.yellow("So you are making a ") + chalk.red("fire") + chalk.yellow(" web project?")));
 	},
 
 	// Begin the user prompt cycle.
@@ -254,18 +272,14 @@ module.exports = WebappGenBase.extend({
 		this.template("index.html", "app/index.html");
 	},
 
-	// Bring other generators into the mix.
-	composing: function () {
+	// Bring JS into the mix.
+	composeJS: function () {
 		var configJSON = this.config.get("project_config");
-		var options = {
-			args: JSON.stringify(configJSON)
-		};
-		var settings = {};
 		if (configJSON.language === "javascript") {
-			this.composeWith("fire-js", options, settings);			
+			this.composeWithJS(configJSON);			
 		}
 		if (configJSON.usingBootstrap === true) {
-			this.composeWith("fire-bootstrap", options, settings);			
+			this.composeWithBootstrap(configJSON);	
 		}
 	}
 
