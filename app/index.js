@@ -7,7 +7,7 @@
 	sub-generators to build the project.
 
 	Author:	Liam Howell <lhowell@mobiquityinc.com>
-	Since:	10-22-2014
+	Since:	10-30-2014
 */
 
 // --------------------------------------------------------------------- Imports
@@ -196,7 +196,7 @@ var WebappGenBase = yeoman.generators.Base.extend({
 			args: JSON.stringify(configJSON)
 		};
 		var settings = {
-			//local: require.resolve("generator-fire-grunt")
+			// local: require.resolve("generator-fire-grunt")
 		};
 		this.composeWith("fire-bootstrap", options, settings);	
 	}
@@ -253,7 +253,11 @@ module.exports = WebappGenBase.extend({
 	// Prints the webcome message.
 	welcomeMessage: function () {
 		// Have Yeoman greet the user.
-		this.log(yosay(chalk.yellow("So you are making a ") + chalk.red("fire") + chalk.yellow(" web project?")));
+		this.log(yosay(
+			chalk.yellow("So you are making a ")
+			+ chalk.red("fire")
+			+ chalk.yellow(" web project?")
+		));
 	},
 
 	// Begin the user prompt cycle.
@@ -265,10 +269,15 @@ module.exports = WebappGenBase.extend({
 		}
 	},
 
+	packageJSON: function () {
+		this.template('_package.json', 'package.json');
+	},
+
 	// Write files and folders to the project.
 	writing: function () {
 		this.createSrcDirectory();
-		this.src.copy("favicon.ico", "app/favicon.ico");
+		this.copy("bowerrc", ".bowerrc");
+		this.copy("favicon.ico", "app/favicon.ico");
 		this.template("index.html", "app/index.html");
 	},
 
@@ -281,6 +290,17 @@ module.exports = WebappGenBase.extend({
 		if (configJSON.usingBootstrap === true) {
 			this.composeWithBootstrap(configJSON);	
 		}
+	},
+
+	install: function () {
+		this.on('end', function () {
+			if (!this.options['skip-install']) {
+				this.installDependencies({
+					//skipMessage: this.options['skip-install-message'],
+					//skipInstall: this.options['skip-install']
+				});
+			}
+		});
 	}
 
 });
