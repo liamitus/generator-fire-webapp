@@ -1,0 +1,6 @@
+{
+    "name": "<%= _.slugify(appname) %>",
+    "engines": {
+        "node": ">=0.10.22"
+    }
+}
