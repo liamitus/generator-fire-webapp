@@ -11,6 +11,8 @@
   ],
   "dependencies": {
     "chalk": "^0.5.1",
+    "generator-fire-bootstrap": "file:../generator-fire-bootstrap",
+    "generator-fire-grunt": "^0.1.2",
     "yeoman-generator": "^0.17.7",
     "yosay": "^1.0.0"
   },
